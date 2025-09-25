@@ -1,0 +1,186 @@
+{#
+Yeh parking_lots.html hai, user ke liye. Yahan user ko saare parking lots dikhte hain.
+- Table ya cards niche hain, yahan se user lot select kar sakta hai.
+#}
+{% extends "base.html" %}
+
+{% block title %}Available Parking Lots - Vehicle Parking System{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2 class="mb-4">
+            <i class="fas fa-building me-2"></i>Available Parking Lots
+        </h2>
+    </div>
+</div>
+
+<div class="row">
+    {% if parking_lots %}
+        {% for lot in parking_lots %}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100">
+                <div class="card-header {% if lot[7] > 0 %}bg-success{% else %}bg-danger{% endif %} text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-parking me-2"></i>{{ lot[1] }}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <p class="mb-1">
+                            <i class="fas fa-map-marker-alt me-1 text-primary"></i>
+                            <strong>Address:</strong>
+                        </p>
+                        <p class="text-muted">{{ lot[3] }}</p>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <p class="mb-1">
+                                <i class="fas fa-rupee-sign me-1 text-success"></i>
+                                <strong>Price:</strong>
+                            </p>
+                            <h5 class="text-success">₹{{ lot[2] }}/hour</h5>
+                        </div>
+                        <div class="col-6">
+                            <p class="mb-1">
+                                <i class="fas fa-car me-1 text-info"></i>
+                                <strong>Available:</strong>
+                            </p>
+                            <h5 class="text-info">{{ lot[7] }}/{{ lot[6] }}</h5>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <p class="mb-1">
+                            <i class="fas fa-map-pin me-1 text-warning"></i>
+                            <strong>Pin Code:</strong> {{ lot[4] }}
+                        </p>
+                    </div>
+                    
+                    {% if lot[7] > 0 %}
+                        <div class="d-grid">
+                            <a href="{{ url_for('user.book_parking', lot_id=lot[0]) }}" 
+                               class="btn btn-primary">
+                                <i class="fas fa-bookmark me-1"></i>Book Spot
+                            </a>
+                        </div>
+                    {% else %}
+                        <div class="d-grid">
+                            <button class="btn btn-secondary" disabled>
+                                <i class="fas fa-times me-1"></i>No Spots Available
+                            </button>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="card-footer">
+                    <small class="text-muted">
+                        <i class="fas fa-info-circle me-1"></i>
+                        {% if lot[7] > 0 %}
+                            {{ lot[7] }} spots available for booking
+                        {% else %}
+                            All spots are currently occupied
+                        {% endif %}
+                    </small>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body text-center py-5">
+                    <i class="fas fa-building fa-4x text-muted mb-3"></i>
+                    <h4 class="text-muted">No Parking Lots Available</h4>
+                    <p class="text-muted">There are currently no parking lots in the system.</p>
+                    <p class="text-muted">Please contact the administrator to add parking lots.</p>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+{% if parking_lots %}
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-chart-bar me-2"></i>Summary
+                </h5>
+            </div>
+            <div class="card-body">
+                {% set total_lots = parking_lots | length %}
+                {% set total_spots = parking_lots | sum(attribute=6) or 0 %}
+                {% set total_available = parking_lots | sum(attribute=7) or 0 %}
+                {% set total_occupied = total_spots - total_available %}
+                
+                <div class="row text-center">
+                    <div class="col-md-3">
+                        <h3 class="text-primary">{{ total_lots }}</h3>
+                        <small class="text-muted">Total Lots</small>
+                    </div>
+                    <div class="col-md-3">
+                        <h3 class="text-info">{{ total_spots }}</h3>
+                        <small class="text-muted">Total Spots</small>
+                    </div>
+                    <div class="col-md-3">
+                        <h3 class="text-success">{{ total_available }}</h3>
+                        <small class="text-muted">Available</small>
+                    </div>
+                    <div class="col-md-3">
+                        <h3 class="text-danger">{{ total_occupied }}</h3>
+                        <small class="text-muted">Occupied</small>
+                    </div>
+                </div>
+                
+                {% if total_spots > 0 %}
+                <div class="progress mt-3">
+                    <div class="progress-bar bg-success" style="width: {{ (total_available / total_spots * 100) | round(1) }}%">
+                        {{ (total_available / total_spots * 100) | round(1) }}% Available
+                    </div>
+                    <div class="progress-bar bg-danger" style="width: {{ (total_occupied / total_spots * 100) | round(1) }}%">
+                        {{ (total_occupied / total_spots * 100) | round(1) }}% Occupied
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-secondary text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-info-circle me-2"></i>Booking Information
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6><i class="fas fa-check-circle text-success me-1"></i>How to Book:</h6>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-arrow-right me-2"></i>Click "Book Spot" on any available lot</li>
+                            <li><i class="fas fa-arrow-right me-2"></i>Enter your vehicle number</li>
+                            <li><i class="fas fa-arrow-right me-2"></i>System automatically assigns the first available spot</li>
+                            <li><i class="fas fa-arrow-right me-2"></i>You can only have one active reservation at a time</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h6><i class="fas fa-exclamation-triangle text-warning me-1"></i>Important Notes:</h6>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-arrow-right me-2"></i>Parking is charged per hour</li>
+                            <li><i class="fas fa-arrow-right me-2"></i>Remember to release your spot when leaving</li>
+                            <li><i class="fas fa-arrow-right me-2"></i>Cost is calculated based on duration</li>
+                            <li><i class="fas fa-arrow-right me-2"></i>Check your dashboard for active reservations</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

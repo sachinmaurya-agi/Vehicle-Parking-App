@@ -1,0 +1,6 @@
+/.venv
+/.git
+/instance
+/__pycache__
+controllers/__pycache__
+models/__pycache__

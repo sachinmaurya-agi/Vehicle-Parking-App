@@ -1,0 +1,180 @@
+{#
+Yeh reports.html hai, admin ke liye. Yahan admin ko reports aur stats dikhte hain.
+- Charts, tables, ya summary cards yahin milenge.
+- Naya report add karna hai toh yahin ya backend me karo.
+#}
+{% extends "base.html" %}
+
+{% block title %}Admin Reports - Vehicle Parking System{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2 class="mb-4">
+            <i class="fas fa-chart-bar me-2"></i>Admin Reports
+        </h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-building me-2"></i>Parking Lot Statistics
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if lot_stats %}
+                <div class="row text-center">
+                    <div class="col-6">
+                        <h3 class="text-primary">{{ lot_stats[0] or 0 }}</h3>
+                        <small class="text-muted">Total Lots</small>
+                    </div>
+                    <div class="col-6">
+                        <h3 class="text-info">{{ lot_stats[1] or 0 }}</h3>
+                        <small class="text-muted">Total Spots</small>
+                    </div>
+                </div>
+                {% else %}
+                <p class="text-muted text-center">No parking lots data available</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-car me-2"></i>Spot Statistics
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if spot_stats %}
+                <div class="row text-center">
+                    <div class="col-4">
+                        <h3 class="text-info">{{ spot_stats[0] or 0 }}</h3>
+                        <small class="text-muted">Total Spots</small>
+                    </div>
+                    <div class="col-4">
+                        <h3 class="text-success">{{ spot_stats[1] or 0 }}</h3>
+                        <small class="text-muted">Available</small>
+                    </div>
+                    <div class="col-4">
+                        <h3 class="text-danger">{{ spot_stats[2] or 0 }}</h3>
+                        <small class="text-muted">Occupied</small>
+                    </div>
+                </div>
+                
+                {% if spot_stats[0] and spot_stats[0] > 0 %}
+                <div class="progress mt-3">
+                    <div class="progress-bar bg-success" style="width: {{ (spot_stats[1] / spot_stats[0] * 100) | round(1) }}%">
+                        {{ (spot_stats[1] / spot_stats[0] * 100) | round(1) }}%
+                    </div>
+                    <div class="progress-bar bg-danger" style="width: {{ (spot_stats[2] / spot_stats[0] * 100) | round(1) }}%">
+                        {{ (spot_stats[2] / spot_stats[0] * 100) | round(1) }}%
+                    </div>
+                </div>
+                {% endif %}
+                {% else %}
+                <p class="text-muted text-center">No spot data available</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if lot_wise_stats %}
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-chart-pie me-2"></i>Parking Lot Wise Statistics
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Location</th>
+                                <th>Total Spots</th>
+                                <th>Available</th>
+                                <th>Occupied</th>
+                                <th>Utilization</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for lot in lot_wise_stats %}
+                            <tr>
+                                <td><strong>{{ lot[0] }}</strong></td>
+                                <td>{{ lot[1] }}</td>
+                                <td>
+                                    <span class="badge bg-success">{{ lot[2] }}</span>
+                                </td>
+                                <td>
+                                    <span class="badge bg-danger">{{ lot[3] }}</span>
+                                </td>
+                                <td>
+                                    {% if lot[1] > 0 %}
+                                        <div class="progress" style="height: 20px;">
+                                            <div class="progress-bar bg-success" style="width: {{ (lot[2] / lot[1] * 100) | round(1) }}%">
+                                                {{ (lot[2] / lot[1] * 100) | round(1) }}%
+                                            </div>
+                                            <div class="progress-bar bg-danger" style="width: {{ (lot[3] / lot[1] * 100) | round(1) }}%">
+                                                {{ (lot[3] / lot[1] * 100) | round(1) }}%
+                                            </div>
+                                        </div>
+                                    {% else %}
+                                        <span class="text-muted">N/A</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-warning text-dark">
+                <h5 class="mb-0">
+                    <i class="fas fa-info-circle me-2"></i>Quick Actions
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <a href="{{ url_for('admin.admin_dashboard') }}" class="btn btn-primary w-100">
+                            <i class="fas fa-tachometer-alt me-1"></i>Dashboard
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="{{ url_for('admin.admin_parking_lots') }}" class="btn btn-success w-100">
+                            <i class="fas fa-building me-1"></i>Parking Lots
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="{{ url_for('admin.admin_users') }}" class="btn btn-info w-100">
+                            <i class="fas fa-users me-1"></i>Users
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="{{ url_for('admin.add_parking_lot') }}" class="btn btn-warning w-100">
+                            <i class="fas fa-plus me-1"></i>Add Lot
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} <!-- Milestone-VP Summary-Users-Admin marker -->

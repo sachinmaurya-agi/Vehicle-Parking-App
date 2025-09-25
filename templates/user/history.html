@@ -1,0 +1,172 @@
+{#
+Yeh history.html hai, user ke liye. Yahan user ko apni saari booking history dikh rahi hai.
+- Table niche hai, yahan se user apni bookings dekh sakta hai, release bhi kar sakta hai.
+- Summary cards aur quick actions bhi niche milenge.
+#}
+{% extends "base.html" %}
+
+{% block title %}Parking History - Vehicle Parking System{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2 class="mb-4">
+            <i class="fas fa-history me-2"></i>My Parking History
+        </h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-list me-2"></i>All Parking Records
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if history %}
+                    <form method="POST" action="{{ url_for('user.release_multiple') }}">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th></th>
+                                        <th>ID</th>
+                                        <th>Location</th>
+                                        <th>Spot</th>
+                                        <th>Vehicle</th>
+                                        <th>Parked In</th>
+                                        <th>Parked Out</th>
+                                        <th>Cost</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for record in history %}
+                                    <tr>
+                                        <td>
+                                            {% if record[7] == 'active' %}
+                                                <input type="checkbox" name="reservation_ids" value="{{ record[0] }}">
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ record[0] }}</td>
+                                        <td>{{ record[1] }}</td>
+                                        <td>{{ record[2] }}</td>
+                                        <td>{{ record[6] }}</td>
+                                        <td>{{ record[3] }}</td>
+                                        <td>{{ record[4] or 'Active' }}</td>
+                                        <td>
+                                            {% if record[5] %}
+                                                <span class="badge bg-success">₹{{ "%.2f"|format(record[5]) }}</span>
+                                            {% else %}
+                                                <span class="text-muted">N/A</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if record[7] == 'active' %}
+                                                <span class="badge bg-warning">Active</span>
+                                            {% else %}
+                                                <span class="badge bg-secondary">Completed</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if record[7] == 'active' %}
+                                                <a href="{{ url_for('user.release_parking', reservation_id=record[0]) }}" 
+                                                   class="btn btn-sm btn-warning">
+                                                    <i class="fas fa-sign-out-alt"></i> Release
+                                                </a>
+                                            {% else %}
+                                                <span class="text-muted">-</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <button type="submit" class="btn btn-danger mt-2">
+                            <i class="fas fa-sign-out-alt"></i> Release Selected
+                        </button>
+                    </form>
+                {% else %}
+                    <div class="text-center py-5">
+                        <i class="fas fa-history fa-4x text-muted mb-3"></i>
+                        <h4 class="text-muted">No Parking History</h4>
+                        <p class="text-muted">You haven't made any parking reservations yet.</p>
+                        <a href="{{ url_for('user.user_parking_lots') }}" class="btn btn-primary">
+                            <i class="fas fa-bookmark me-1"></i>Book Your First Spot
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if history %}
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-chart-pie me-2"></i>History Summary
+                </h5>
+            </div>
+            <div class="card-body">
+                {% set total_reservations = history | length %}
+                {% set active_reservations = history | selectattr(7, 'equalto', 'active') | list | length %}
+                {% set completed_reservations = total_reservations - active_reservations %}
+                {% set total_cost = history | map(attribute=5) | select('number') | sum or 0 %}
+                
+                <div class="row text-center">
+                    <div class="col-6">
+                        <h3 class="text-primary">{{ total_reservations }}</h3>
+                        <small class="text-muted">Total Reservations</small>
+                    </div>
+                    <div class="col-6">
+                        <h3 class="text-success">₹{{ "%.2f"|format(total_cost) }}</h3>
+                        <small class="text-muted">Total Spent</small>
+                    </div>
+                </div>
+                <hr>
+                <div class="row text-center">
+                    <div class="col-6">
+                        <h3 class="text-warning">{{ active_reservations }}</h3>
+                        <small class="text-muted">Active</small>
+                    </div>
+                    <div class="col-6">
+                        <h3 class="text-secondary">{{ completed_reservations }}</h3>
+                        <small class="text-muted">Completed</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-info-circle me-2"></i>Quick Actions
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="{{ url_for('user.user_dashboard') }}" class="btn btn-primary">
+                        <i class="fas fa-home me-1"></i>Back to Dashboard
+                    </a>
+                    <a href="{{ url_for('user.user_parking_lots') }}" class="btn btn-success">
+                        <i class="fas fa-building me-1"></i>View Parking Lots
+                    </a>
+                    <a href="{{ url_for('user.user_profile') }}" class="btn btn-info">
+                        <i class="fas fa-user me-1"></i>My Profile
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %} <!-- Milestone-VP Summary-Users-Admin marker -->

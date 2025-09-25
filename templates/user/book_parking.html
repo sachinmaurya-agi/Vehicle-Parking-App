@@ -1,0 +1,84 @@
+{#
+Yeh book_parking.html hai, user ke liye. Yahan se user parking spot book kar sakta hai.
+- Form niche hai, yahan se vehicle number aur spots select kar sakte ho.
+- JavaScript niche hai, usse fields dynamic bante hain.
+#}
+{% extends "base.html" %}
+
+{% block title %}Book Parking - Vehicle Parking System{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">
+                    <i class="fas fa-bookmark me-2"></i>Book Parking Spot
+                </h4>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <h6><i class="fas fa-info-circle me-1"></i>Parking Lot Details</h6>
+                    <p class="mb-1"><strong>Location:</strong> {{ parking_lot[1] }}</p>
+                    <p class="mb-1"><strong>Address:</strong> {{ parking_lot[3] }}</p>
+                    <p class="mb-1"><strong>Price:</strong> ₹{{ parking_lot[2] }}/hour</p>
+                    <p class="mb-0"><strong>Available Spots:</strong> {{ available_spots }}</p>
+                </div>
+                
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="num_spots" class="form-label">
+                            <i class="fas fa-th-large me-1"></i>Number of Spots to Book *
+                        </label>
+                        <input type="number" class="form-control" id="num_spots" name="num_spots" min="1" max="{{ available_spots }}" value="1" required onchange="updateVehicleFields()">
+                        <div class="form-text">You can book up to {{ available_spots }} spots in this lot.</div>
+                    </div>
+
+                    <div id="vehicle-fields">
+                        <div class="mb-3">
+                            <label for="vehicle_number_1" class="form-label">
+                                <i class="fas fa-car me-1"></i>Vehicle Number for Spot 1 *
+                            </label>
+                            <input type="text" class="form-control" id="vehicle_number_1" name="vehicle_numbers[]" placeholder="e.g., MH12AB1234" required>
+                            <div class="form-text">Enter your 4-wheeler vehicle number</div>
+                        </div>
+                    </div>
+
+                    <script>
+                    function updateVehicleFields() {
+                        const numSpots = parseInt(document.getElementById('num_spots').value) || 1;
+                        const container = document.getElementById('vehicle-fields');
+                        container.innerHTML = '';
+                        for (let i = 1; i <= numSpots; i++) {
+                            container.innerHTML += `
+                                <div class="mb-3">
+                                    <label for="vehicle_number_${i}" class="form-label">
+                                        <i class='fas fa-car me-1'></i>Vehicle Number for Spot ${i} *
+                                    </label>
+                                    <input type="text" class="form-control" id="vehicle_number_${i}" name="vehicle_numbers[]" placeholder="e.g., MH12AB1234" required>
+                                    <div class="form-text">Enter your 4-wheeler vehicle number</div>
+                                </div>
+                            `;
+                        }
+                    }
+                    document.addEventListener('DOMContentLoaded', updateVehicleFields);
+                    </script>
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle me-1"></i>
+                        <strong>Note:</strong> You can book multiple spots at a time. The system will automatically assign available spots in this parking lot.
+                    </div>
+                    
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ url_for('user.user_parking_lots') }}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left me-1"></i>Back
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-bookmark me-1"></i>Book Spot(s)
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

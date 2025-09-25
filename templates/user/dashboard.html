@@ -1,0 +1,135 @@
+{#
+Yeh dashboard.html hai, user ke liye. Yahan user ko recent history aur available parking lots dikhte hain.
+- Cards, tables, ya quick actions niche hain.
+#}
+{% extends "base.html" %}
+
+{% block title %}User Dashboard - Vehicle Parking System{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2 class="mb-4">
+            <i class="fas fa-home me-2"></i>User Dashboard
+        </h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-history me-2"></i>Recent Parking History
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if recent_history %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Location</th>
+                                    <th>Spot</th>
+                                    <th>Vehicle</th>
+                                    <th>Parked In</th>
+                                    <th>Parked Out</th>
+                                    <th>Cost</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for record in recent_history %}
+                                <tr>
+                                    <td>{{ record[0] }}</td>
+                                    <td>{{ record[1] }}</td>
+                                    <td>{{ record[2] }}</td>
+                                    <td>{{ record[6] }}</td>
+                                    <td>{{ record[3] }}</td>
+                                    <td>{{ record[4] or 'Active' }}</td>
+                                    <td>{{ '₹' + record[5] | string if record[5] else 'N/A' }}</td>
+                                    <td>
+                                        {% if not record[4] %}
+                                            <a href="{{ url_for('user.release_parking', reservation_id=record[0]) }}" 
+                                               class="btn btn-sm btn-warning">
+                                                <i class="fas fa-sign-out-alt"></i> Release
+                                            </a>
+                                        {% else %}
+                                            <span class="badge bg-secondary">Completed</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-history fa-3x text-muted mb-3"></i>
+                        <h5 class="text-muted">No parking history</h5>
+                        <p class="text-muted">Your parking history will appear here once you book a spot.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-building me-2"></i>Available Parking Lots
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if available_lots %}
+                    {% for lot in available_lots %}
+                    <div class="card mb-2">
+                        <div class="card-body">
+                            <h6 class="card-title">{{ lot[1] }}</h6>
+                            <p class="card-text small">
+                                <i class="fas fa-map-marker-alt me-1"></i>{{ lot[3] }}<br>
+                                <i class="fas fa-rupee-sign me-1"></i>{{ lot[2] }}/hour<br>
+                                <i class="fas fa-car me-1"></i>{{ lot[7] }} spots available
+                            </p>
+                            <a href="{{ url_for('user.book_parking', lot_id=lot[0]) }}" 
+                               class="btn btn-sm btn-primary">
+                                <i class="fas fa-bookmark me-1"></i>Book Spot
+                            </a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-building fa-3x text-muted mb-3"></i>
+                        <h5 class="text-muted">No available lots</h5>
+                        <p class="text-muted">All parking lots are currently full.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-plus me-2"></i>Quick Actions
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="{{ url_for('user.user_parking_lots') }}" class="btn btn-info">
+                        <i class="fas fa-building me-1"></i>View All Lots
+                    </a>
+                    <a href="{{ url_for('user.user_history') }}" class="btn btn-secondary">
+                        <i class="fas fa-history me-1"></i>Full History
+                    </a>
+                    <a href="{{ url_for('user.user_profile') }}" class="btn btn-warning">
+                        <i class="fas fa-user me-1"></i>My Profile
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

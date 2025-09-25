@@ -1,0 +1,92 @@
+{#
+Yeh profile.html hai, user ke liye. Yahan se user apna profile dekh sakta hai.
+- Details upar dikhte hain, edit ka option bhi milta hai.
+#}
+{% extends "base.html" %}
+
+{% block title %}My Profile - Vehicle Parking System{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">
+                    <i class="fas fa-user me-2"></i>My Profile
+                </h4>
+            </div>
+            <div class="card-body">
+                {% if user %}
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">
+                                <i class="fas fa-user me-1"></i>Username:
+                            </label>
+                            <p class="form-control-plaintext">{{ user[0] }}</p>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">
+                                <i class="fas fa-envelope me-1"></i>Email:
+                            </label>
+                            <p class="form-control-plaintext">{{ user[1] }}</p>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">
+                                <i class="fas fa-id-card me-1"></i>Full Name:
+                            </label>
+                            <p class="form-control-plaintext">{{ user[2] }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">
+                                <i class="fas fa-map-marker-alt me-1"></i>Address:
+                            </label>
+                            <p class="form-control-plaintext">{{ user[3] or 'Not provided' }}</p>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">
+                                <i class="fas fa-map-pin me-1"></i>Pin Code:
+                            </label>
+                            <p class="form-control-plaintext">{{ user[4] or 'Not provided' }}</p>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">
+                                <i class="fas fa-phone me-1"></i>Mobile Number:
+                            </label>
+                            <p class="form-control-plaintext">{{ user[5] or 'Not provided' }}</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <hr>
+                
+                <div class="d-flex justify-content-between">
+                    <a href="{{ url_for('user.user_dashboard') }}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left me-1"></i>Back to Dashboard
+                    </a>
+                    <a href="{{ url_for('user.edit_profile') }}" class="btn btn-primary">
+                        <i class="fas fa-edit me-1"></i>Edit Profile
+                    </a>
+                </div>
+                {% else %}
+                <div class="text-center py-4">
+                    <i class="fas fa-user fa-3x text-muted mb-3"></i>
+                    <h5 class="text-muted">Profile information not available</h5>
+                    <p class="text-muted">Please contact support if this issue persists.</p>
+                    <a href="{{ url_for('user.user_dashboard') }}" class="btn btn-primary">
+                        <i class="fas fa-arrow-left me-1"></i>Back to Dashboard
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

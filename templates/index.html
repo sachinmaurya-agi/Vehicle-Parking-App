@@ -1,0 +1,117 @@
+{#
+Yeh index.html hai, matlab home page. Sabse pehle yahi dikhega jab koi site kholega.
+- Upar ka layout base.html se aata hai.
+- Yahan welcome message aur main options dikhte hain.
+- Kuch bhi naya add karna hai toh yahin karo.
+#}
+{% extends "base.html" %}
+
+{% block title %}Home - Vehicle Parking System{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body text-center">
+                <h1 class="card-title mb-4">
+                    <i class="fas fa-parking text-primary me-3"></i>
+                    Welcome to Vehicle Parking System
+                </h1>
+                <p class="card-text lead">
+                    A modern and efficient parking management system for 4-wheeler vehicles.
+                    Book your parking spot with ease and manage your parking history.
+                </p>
+                
+                {% if not session.user_id %}
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        <i class="fas fa-user me-2"></i>For Users
+                                    </h5>
+                                    <p class="card-text">
+                                        Register and book parking spots in available parking lots.
+                                        Manage your parking history and view reports.
+                                    </p>
+                                    <a href="{{ url_for('register') }}" class="btn btn-primary">
+                                        <i class="fas fa-user-plus me-1"></i>Register Now
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        <i class="fas fa-user-shield me-2"></i>For Administrators
+                                    </h5>
+                                    <p class="card-text">
+                                        Manage parking lots, view user activities, and generate reports.
+                                        Full control over the parking system.
+                                    </p>
+                                    <a href="{{ url_for('login') }}" class="btn btn-success">
+                                        <i class="fas fa-sign-in-alt me-1"></i>Admin Login
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <p class="text-muted">
+                            Already have an account? 
+                            <a href="{{ url_for('login') }}" class="text-decoration-none">Login here</a>
+                        </p>
+                    </div>
+                {% else %}
+                    <div class="mt-4">
+                        <h4>Welcome back, {{ session.username }}!</h4>
+                        {% if session.role == 'admin' %}
+                            <p class="text-muted">You are logged in as an administrator.</p>
+                            <a href="{{ url_for('admin.admin_dashboard') }}" class="btn btn-primary">
+                                <i class="fas fa-tachometer-alt me-1"></i>Go to Admin Dashboard
+                            </a>
+                        {% else %}
+                            <p class="text-muted">You are logged in as a user.</p>
+                            <a href="{{ url_for('user.user_dashboard') }}" class="btn btn-primary">
+                                <i class="fas fa-home me-1"></i>Go to User Dashboard
+                            </a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="row mt-4">
+            <div class="col-md-4">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <i class="fas fa-car fa-3x text-primary mb-3"></i>
+                        <h5 class="card-title">Easy Booking</h5>
+                        <p class="card-text">Book parking spots with just a few clicks</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <i class="fas fa-clock fa-3x text-success mb-3"></i>
+                        <h5 class="card-title">24/7 Access</h5>
+                        <p class="card-text">Access your parking information anytime</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <i class="fas fa-chart-line fa-3x text-info mb-3"></i>
+                        <h5 class="card-title">Smart Reports</h5>
+                        <p class="card-text">Track your parking history and costs</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,197 @@
+{#
+Yeh admin ka dashboard.html hai. Yahan se admin sab kuch dekh sakta hai, jaise users, parking lots, reports, etc.
+- Upar ka layout base.html se aata hai.
+- Neeche cards, tables, ya charts dikhte hain.
+- Kuch bhi naya add karna hai toh yahin ya related template me karo.
+#}
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - Vehicle Parking System{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2 class="mb-4">
+            <i class="fas fa-tachometer-alt me-2"></i>Admin Dashboard
+        </h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-building me-2"></i>Parking Lots Overview
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if parking_lots %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Location</th>
+                                    <th>Price/Hour</th>
+                                    <th>Total Spots</th>
+                                    <th>Available</th>
+                                    <th>Occupied</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for lot in parking_lots %}
+                                <tr>
+                                    <td>{{ lot[0] }}</td>
+                                    <td>{{ lot[1] }}</td>
+                                    <td>₹{{ lot[2] }}</td>
+                                    <td>{{ lot[6] or 0 }}</td>
+                                    <td>
+                                        <span class="badge bg-success">{{ lot[7] or 0 }}</span>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-danger">{{ lot[8] or 0 }}</span>
+                                    </td>
+                                    <td>
+                                        <a href="{{ url_for('admin.view_parking_spots', lot_id=lot[0]) }}" 
+                                           class="btn btn-sm btn-info">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a href="{{ url_for('admin.edit_parking_lot', lot_id=lot[0]) }}" 
+                                           class="btn btn-sm btn-warning">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-building fa-3x text-muted mb-3"></i>
+                        <h5 class="text-muted">No parking lots found</h5>
+                        <p class="text-muted">Create your first parking lot to get started.</p>
+                        <a href="{{ url_for('admin.add_parking_lot') }}" class="btn btn-primary">
+                            <i class="fas fa-plus me-1"></i>Add Parking Lot
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-plus me-2"></i>Quick Actions
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="{{ url_for('admin.add_parking_lot') }}" class="btn btn-success">
+                        <i class="fas fa-plus me-1"></i>Add Parking Lot
+                    </a>
+                    <a href="{{ url_for('admin.admin_users') }}" class="btn btn-info">
+                        <i class="fas fa-users me-1"></i>Manage Users
+                    </a>
+                    <a href="{{ url_for('admin.admin_reports') }}" class="btn btn-warning">
+                        <i class="fas fa-chart-bar me-1"></i>View Reports
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-chart-pie me-2"></i>Summary
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if parking_lots %}
+                    {% set total_spots = parking_lots | sum(attribute=6) or 0 %}
+                    {% set total_available = parking_lots | sum(attribute=7) or 0 %}
+                    {% set total_occupied = parking_lots | sum(attribute=8) or 0 %}
+                    
+                    <div class="row text-center">
+                        <div class="col-4">
+                            <h4 class="text-primary">{{ parking_lots | length }}</h4>
+                            <small class="text-muted">Lots</small>
+                        </div>
+                        <div class="col-4">
+                            <h4 class="text-success">{{ total_available }}</h4>
+                            <small class="text-muted">Available</small>
+                        </div>
+                        <div class="col-4">
+                            <h4 class="text-danger">{{ total_occupied }}</h4>
+                            <small class="text-muted">Occupied</small>
+                        </div>
+                    </div>
+                    
+                    <div class="progress mt-3">
+                        {% if total_spots > 0 %}
+                            <div class="progress-bar bg-success" style="width: {{ (total_available / total_spots * 100) | round(1) }}%"></div>
+                            <div class="progress-bar bg-danger" style="width: {{ (total_occupied / total_spots * 100) | round(1) }}%"></div>
+                        {% endif %}
+                    </div>
+                {% else %}
+                    <p class="text-muted text-center">No data available</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-secondary text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-history me-2"></i>Recent Parking History
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if recent_history %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>User</th>
+                                    <th>Location</th>
+                                    <th>Spot</th>
+                                    <th>Parked In</th>
+                                    <th>Parked Out</th>
+                                    <th>Cost</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for record in recent_history %}
+                                <tr>
+                                    <td>{{ record[0] }}</td>
+                                    <td>{{ record[1] }}</td>
+                                    <td>{{ record[2] }}</td>
+                                    <td>{{ record[3] }}</td>
+                                    <td>{{ record[4] }}</td>
+                                    <td>{{ record[5] or 'Active' }}</td>
+                                    <td>{{ '₹' + record[6] | string if record[6] else 'N/A' }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-history fa-3x text-muted mb-3"></i>
+                        <h5 class="text-muted">No parking history</h5>
+                        <p class="text-muted">Parking history will appear here once users start booking spots.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
