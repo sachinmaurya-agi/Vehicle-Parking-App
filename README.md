@@ -1,4 +1,5 @@
 **24f2000305 is my roll number for the college so the this project is entirely done by me**
+
 Vehicle Parking System
 
 A modern and efficient parking management system for 4-wheeler vehicles built with Flask, SQLite, and Bootstrap.
