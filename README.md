@@ -1,4 +1,4 @@
-**24f2000305 is my roll number for the college so the this project is entirely done by me**
+**24f2000305 is my roll number for the college and my college email is 24f2000305@ds.study.iitm.ac.in so both the contributor is me**
 
 Vehicle Parking System
 
