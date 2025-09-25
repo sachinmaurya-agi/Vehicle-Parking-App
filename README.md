@@ -1,29 +1,6 @@
-Of course\! Here is your project information transformed into a modern and cool-looking README file.
-
------
-
-<br>
-&lt;div align=&quot;center&quot;&gt;
-  &lt;img src=&quot;[https://raw.githubusercontent.com/othneildrew/Best-README-Template/master/images/logo.png](https://raw.githubusercontent.com/othneildrew/Best-README-Template/master/images/logo.png)&quot; alt=&quot;logo&quot; width=&quot;200&quot; height=&quot;auto&quot; /&gt;
-  &lt;h1&gt;Vehicle Parking System 🅿️&lt;/h1&gt;
-  &lt;p&gt;
-    A modern and efficient parking management system for 4-wheeler vehicles built with Flask, SQLite, and Bootstrap.
-  &lt;/p&gt;
-
-\<p\>
-\<img src="[https://img.shields.io/badge/Python-3.7+-blue.svg](https://www.google.com/search?q=https://img.shields.io/badge/Python-3.7%2B-blue.svg)" alt="Python"\>
-\<img src="[https://img.shields.io/badge/Flask-2.0-green.svg](https://www.google.com/search?q=https://img.shields.io/badge/Flask-2.0-green.svg)" alt="Flask"\>
-\<img src="[https://img.shields.io/badge/Database-SQLite-orange.svg](https://www.google.com/search?q=https://img.shields.io/badge/Database-SQLite-orange.svg)" alt="SQLite"\>
-\<img src="[https://img.shields.io/badge/Frontend-Bootstrap\_5-purple.svg](https://www.google.com/search?q=https://img.shields.io/badge/Frontend-Bootstrap_5-purple.svg)" alt="Bootstrap"\>
-\</p\>
-\</div\>
-<br>
-
-## ✨ Features
-
-This system is packed with features for both administrators and users, ensuring a seamless parking experience.
-
-\<hr\>
+## ✍️ Crafted By
+Sachin Maurya 
+* **Both the contributors is me**
 
 ### 👑 Admin Features
 
@@ -42,7 +19,7 @@ This system is packed with features for both administrators and users, ensuring 
   * **⚙️ Profile Management:** Easily update your personal and vehicle information.
   * **📉 Personal Reports:** View your own parking statistics and spending.
 
-\<hr\>
+
 
 ## 🛠️ Technology Stack
 
@@ -54,7 +31,7 @@ This project is built with a powerful and lightweight tech stack:
   * **Templating:** **Jinja2**
   * **Authentication:** Session-based with password hashing
 
-\<hr\>
+
 
 ## 🚀 Getting Started
 
@@ -89,7 +66,7 @@ Follow these steps to get the project up and running on your local machine.
 4.  **Launch\!** 🚀
     Open your web browser and navigate to `http://localhost:5000`
 
-\<hr\>
+
 
 ## 🗃️ Database Setup
 
@@ -105,12 +82,5 @@ The application is designed for simplicity. The SQLite database (`parking.db`) a
 >   * **Username:** `admin`
 >   * **Password:** `admin123`
 
-\<hr\>
 
-## ✍️ Crafted By
 
-This project was developed by:
-
-| Name/ID      | Email                           |
-| :----------- | :------------------------------ |
-| **24f2000305** | `24f2000305@ds.study.iitm.ac.in` |
