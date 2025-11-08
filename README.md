@@ -1,29 +1,29 @@
 ## Vehical Parking APP
 
-## ✍️ Crafted By
+##  Crafted By
 Sachin Maurya 
 * **Both the contributors is me**
 
-### 👑 Admin Features
+###  Admin Features
 
-  * **📊 Dashboard:** Get a bird's-eye view of all parking lots with real-time statistics.
-  * **🏗️ Lot Management:** Effortlessly add, edit, and delete entire parking lots.
-  * **👥 User Management:** View and manage all registered users on the platform.
-  * **📈 Reports & Analytics:** Generate insightful reports and charts on parking activity.
-  * **🚗 Spot Monitoring:** Monitor the status of individual parking spots in real-time.
+  * ** Dashboard:** Get a bird's-eye view of all parking lots with real-time statistics.
+  * **Lot Management:** Effortlessly add, edit, and delete entire parking lots.
+  * ** User Management:** View and manage all registered users on the platform.
+  * ** Reports & Analytics:** Generate insightful reports and charts on parking activity.
+  * **Spot Monitoring:** Monitor the status of individual parking spots in real-time.
 
-### 👤 User Features
+### User Features
 
-  * **🔐 Secure Auth:** Easy and secure registration and login for all users.
-  * **✅ Parking Booking:** Find and book available parking spots in just a few clicks.
-  * **💸 Spot Release & Billing:** Release your spot and get an instantly calculated cost.
-  * **📜 Parking History:** Keep a detailed record of all your past parking sessions.
-  * **⚙️ Profile Management:** Easily update your personal and vehicle information.
-  * **📉 Personal Reports:** View your own parking statistics and spending.
+  * ** Secure Auth:** Easy and secure registration and login for all users.
+  * ** Parking Booking:** Find and book available parking spots in just a few clicks.
+  * **Spot Release & Billing:** Release your spot and get an instantly calculated cost.
+  * ** Parking History:** Keep a detailed record of all your past parking sessions.
+  * ** Profile Management:** Easily update your personal and vehicle information.
+  * **Personal Reports:** View your own parking statistics and spending.
 
 
 
-## 🛠️ Technology Stack
+##  Technology Stack
 
 This project is built with a powerful and lightweight tech stack:
 
@@ -35,7 +35,7 @@ This project is built with a powerful and lightweight tech stack:
 
 
 
-## 🚀 Getting Started
+##  Getting Started
 
 Follow these steps to get the project up and running on your local machine.
 
@@ -65,12 +65,12 @@ Follow these steps to get the project up and running on your local machine.
     python app.py
     ```
 
-4.  **Launch\!** 🚀
+4.  **Launch\!** 
     Open your web browser and navigate to `http://localhost:5000`
 
 
 
-## 🗃️ Database Setup
+##  Database Setup
 
 The application is designed for simplicity. The SQLite database (`parking.db`) and all necessary tables will be **created automatically** on the first run.
 
@@ -79,7 +79,7 @@ The application is designed for simplicity. The SQLite database (`parking.db`) a
   * `Parking_Spots` table
   * `Reservations` table
 
-> **⚠️ Default Admin Account**
+> ** Default Admin Account**
 >
 >   * **Username:** `admin`
 >   * **Password:** `admin123`
